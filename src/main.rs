@@ -1,3 +1,9 @@
+mod cube;
+use cube::cube::Cube;
+
+
 fn main() {
-    println!("Hello, world!");
+    let c = Cube::new(3);
+    c.dbg();
+    c.
 }
