@@ -6,7 +6,7 @@ pub enum Color {
     Yellow,
     Green,
     White,
-    Empty
+    Empty,
 }
 
 impl Color {
@@ -26,17 +26,14 @@ impl Color {
     }
 }
 
-
 #[derive(Clone, Debug)]
 pub struct Cube {
     pub size: usize,
-    pub faces: Vec<Vec<Color>> 
+    pub faces: Vec<Vec<Color>>,
 }
 
 impl Cube {
-
-    pub fn new(_size: usize) -> Self 
-    {
+    pub fn new(_size: usize) -> Self {
         let size = _size;
         let green_face = vec![Color::Green; size * size];
         let white_face = vec![Color::White; size * size];
@@ -45,12 +42,12 @@ impl Cube {
         let red_face = vec![Color::Red; size * size];
         let blue_face = vec![Color::Blue; size * size];
         let faces = vec![
-            green_face,
             white_face,
+            blue_face,
+            red_face,
+            green_face,
             orange_face,
             yellow_face,
-            red_face,
-            blue_face,
         ];
         Cube { size, faces: faces }
     }
@@ -89,6 +86,26 @@ impl Cube {
         println!();
     }
 
-    
+    pub fn get_col(&self, face: usize, col: usize) -> Vec<&Color> {
+        let mut res = Vec::new();
 
+        for (index, case) in self.faces[face].iter().enumerate() {
+            if index % self.size == col {
+                res.push(case);
+            }
+        }
+
+        res
+    }
+
+    pub fn get_row(&self, face: usize, row: usize) -> Vec<&Color> {
+        let mut res = Vec::new();
+        let stop = self.size * (row + 1);
+        for (index, case) in self.faces[face].iter().enumerate().skip(self.size * row) {
+            if index < stop {
+                res.push(case);
+            }
+        }
+        res
+    }
 }

@@ -1,9 +1,15 @@
 mod cube;
 use cube::cube::Cube;
 
+use crate::cube::cube::Color;
+
 
 fn main() {
-    let c = Cube::new(3);
+    let mut c = Cube::new(3);
     c.dbg();
-    c.
+    c.faces[0][1] = Color::Green;
+    c.faces[0][3] = Color::Blue;
+    c.dbg();
+    let v = c.get_row(0, 0);
+    dbg!(v);
 }
