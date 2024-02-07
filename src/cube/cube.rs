@@ -108,4 +108,16 @@ impl Cube {
         }
         res
     }
+
+    pub fn rotate(&self,face : usize){
+        let mut res = Vec::new();
+        let mut col;
+        for i in 0..self.size{
+            col = self.get_col(face, self.size - i);
+            for y in col.iter(){
+                res.push(y);
+            }
+        }
+        self.faces[face] = res;
+    }
 }
