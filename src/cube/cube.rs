@@ -46,8 +46,8 @@ impl fmt::Display for Color {
 
 #[derive(Clone, Debug)]
 pub struct Cube {
-    pub size: usize,
-    pub faces: Vec<Vec<Color>>,
+    size: usize,
+    faces: Vec<Vec<Color>>,
 }
 
 impl Cube {
@@ -84,6 +84,11 @@ impl Cube {
             yellow_face,
         ];
         Cube { size, faces: faces }
+    }
+
+    /// This function return the size of the cube
+    pub fn get_size(&self) -> usize {
+        self.size
     }
 
     /// This function draw the cube in the console
