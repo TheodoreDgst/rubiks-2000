@@ -16,7 +16,7 @@ use rand::Rng;
 
 const SIZE: f32 = 1.0;
 const OFFSET: f32 = 0.2;
-const ANIMATION_TIME: f32 = 0.5;
+const ANIMATION_TIME: f32 = 1.5;
 
 #[derive(PartialEq)]
 pub enum Move {
@@ -122,11 +122,19 @@ impl Cublet {
 
 pub struct Gcube {
     cube: Cube,
-    node: SceneNode,
     cublets: Vec<Cublet>,
 }
 
 impl Gcube {
+    /// This function crate a new Gcube
+    ///
+    /// # Args:
+    /// * '_cube' - the Cube object (to talk with solver)
+    /// * 'window' - the window in which display the 3D object
+    ///
+    /// ## Warning:
+    /// The size of the cube will depend on the size of the '_cube' parameter!
+    ///
     pub fn new(_cube: Cube, window: &mut Window) -> Self {
         let mut _node = window.add_group();
         let s = (_cube.get_size() as i32) / 2;
@@ -190,12 +198,12 @@ impl Gcube {
 
         Gcube {
             cube: _cube,
-            node: _node,
+
             cublets: _cublets,
         }
     }
 
-    pub fn shuffle(&mut self, window: &mut Window ,moves: u32) {
+    pub fn shuffle(&mut self, window: &mut Window, moves: u32) {
         let mut rng = rand::thread_rng();
 
         for _ in 0..moves {
@@ -232,13 +240,13 @@ impl Gcube {
     }
 
     /// This function make the graphic cube execute move with animation
-    /// 
+    ///
     /// # Args
     /// * 'window' - a reference to the window where the cube is displayed
     /// * 'mov' - the type of move
     /// * 'n' - the stripe concerned by the move (depending on the type)
-    /// 
-    /// # Warning: 
+    ///
+    /// # Warning:
     /// The time of the animation will depend on the global constant 'ANIMATION_DURATION'
     pub fn apply_move(&mut self, window: &mut Window, mov: Move, n: usize) {
         let animation_duration = Duration::from_secs_f32(ANIMATION_TIME);
@@ -386,8 +394,4 @@ impl Gcube {
             }
         }
     }
-}
-
-fn round(n: f32, precision: f32) -> f32 {
-    (n / precision).round() * precision
 }

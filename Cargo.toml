@@ -1,12 +1,9 @@
 [package]
-name = "tmp"
+name = "delta"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 rand = "0.8"
 kiss3d = "0.35.0"
-druid = "0.8.2"
 nalgebra = "0.32.3"

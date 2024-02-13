@@ -136,7 +136,7 @@ impl Cube {
     /// # Return
     ///
     /// The colors composing this colonn in a vector
-    pub fn get_col(&self, face: usize, col: usize) -> Vec<Color> {
+    fn get_col(&self, face: usize, col: usize) -> Vec<Color> {
         let mut res = Vec::new();
 
         for (index, case) in self.faces[face].iter().enumerate() {
@@ -409,22 +409,6 @@ impl Cube {
                 _ => self.move_vp(n),
             }
         }
-    }
-
-    /// MDR
-    pub fn cross(&mut self) {
-        self.move_h(0);
-        self.move_h(2);
-        self.move_h(0);
-        self.move_h(2);
-        self.move_v(0);
-        self.move_v(2);
-        self.move_v(0);
-        self.move_v(2);
-        self.move_l(0);
-        self.move_l(2);
-        self.move_l(0);
-        self.move_l(2);
     }
 }
 
