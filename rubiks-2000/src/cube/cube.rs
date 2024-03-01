@@ -1,5 +1,5 @@
 use super::defs::*;
-use super::enums::{Color, Corner, Edge};
+use super::enums::{Corner, Edge};
 use super::face_cube::*;
 use std::fmt; // Usef for impl display
 
@@ -51,17 +51,16 @@ impl Cube {
     pub fn get_eo(&self) -> [u8; 12] {
         self.eo
     }
-
+    /// Multiply this cubie cube with another cubie cube "other", restricted to the corners. Does not change other.
     pub fn corner_multiply(&mut self, other: Cube) {
-        // Multiply this cubie cube with another cubie cube "other", restricted to the corners. Does not change other.
         let mut new_corner_perm = [0; 8];
         let mut new_corner_ori = [0; 8];
         let mut current_ori = 0;
 
         for c in 0..8 {
-            new_corner_perm[c] = self.cp[b.cp[c] as usize] as u8;
-            let ori_a = self.co[b.cp[c] as usize] as i8;
-            let ori_b = b.co[c] as i8;
+            new_corner_perm[c] = self.cp[other.cp[c] as usize] as u8;
+            let ori_a = self.co[other.cp[c] as usize] as i8;
+            let ori_b = other.co[c] as i8;
             if ori_a < 3 && ori_b < 3 {
                 // two regular cubes
                 current_ori = ori_a + ori_b;
@@ -95,9 +94,8 @@ impl Cube {
             self.co[c] = new_corner_ori[c] as u8;
         }
     }
-
+    /// Multiply this Cubie Cube with another Cubie Cube 'other', restricted to the edges. Does not change 'other'.
     pub fn edge_multiply(&mut self, other: Cube) {
-        // Multiply this Cubie Cube with another Cubie Cube 'other', restricted to the edges. Does not change 'other'.
         let mut new_edge_permutation: Vec<u8> = vec![0; 12];
         let mut new_edge_orientation: Vec<u8> = vec![0; 12];
         for edge in 0..12 {
@@ -111,9 +109,8 @@ impl Cube {
             self.eo[edge] = new_edge_orientation[edge];
         }
     }
-
+    ///apply the differente move of the cube other to current cube
     pub fn multiply(&mut self, other: Cube) {
-        //apply the differente move of the cube other to current cube
         self.corner_multiply(other);
         self.edge_multiply(other);
     }
@@ -164,13 +161,12 @@ impl Cube {
         }
         return ret;
     }
-
+    ///Return a facelet representation of the cube.
     pub fn to_facelet_cube(self) -> FaceCube {
-        //"""Return a facelet representation of the cube."""
         let mut face_cube = FaceCube::new();
         for color in 0..N_COLORS {
-            let corner = self.cp[color as usize]; //# corner j is at corner position i
-            let orientation = self.co[color as usize]; //# orientation of C j at position i
+            let corner = self.cp[color as usize]; // corner j is at corner position i
+            let orientation = self.co[color as usize]; // orientation of C j at position i
             for k in 0..3 {
                 let index =
                     CORNER_FACELET[color as usize][((k + orientation) % 3) as usize] as usize;
@@ -180,7 +176,7 @@ impl Cube {
         }
 
         for edge in 0..N_EDGES {
-            let j = self.ep[edge as usize]; //# similar for Es
+            let j = self.ep[edge as usize]; // similar for Es
             let orientation = self.eo[edge as usize];
             for k in 0..2 {
                 let index = EDGE_FACELET[edge as usize][((k + orientation) % 2) as usize] as usize;
@@ -190,9 +186,8 @@ impl Cube {
         }
         face_cube
     }
-
+    ///Give the parity of the corner permutation.
     pub fn corner_parity(self) -> u8 {
-        //"""Give the parity of the corner permutation."""
         let mut parity = 0;
         for corner in (0..N_CORNERS).rev() {
             for permutation in (corner..=0).rev() {
@@ -203,9 +198,8 @@ impl Cube {
         }
         parity % 2
     }
-
+    ///Give the parity of the edge permutation. A solvable cube has the same corner and edge parity.
     pub fn edge_parity(self) -> u8 {
-        //"""Give the parity of the edge permutation. A solvable cube has the same corner and edge parity."""
         let mut parity = 0;
         for edge in (0..N_EDGES).rev() {
             for permutation in (0..edge).rev() {
@@ -216,9 +210,8 @@ impl Cube {
         }
         parity % 2
     }
-
+    ///Check if cubiecube is valid.
     pub fn verify(&self) -> bool {
-        //"""Check if cubiecube is valid."""
         let mut edge_count = [0; 12];
         for i in 0..N_EDGES {
             edge_count[self.ep[i as usize] as usize] += 1;

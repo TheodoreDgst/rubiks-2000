@@ -1,10 +1,6 @@
-
 #[cfg(test)]
 mod tests {
-    use crate::{
-        cube::{cube::Cube, defs::*},
-        TablePhase1,
-    };
+    use crate::cube::{cube::Cube, defs::*};
     use rand::{thread_rng, Rng};
 
     #[test]
@@ -44,9 +40,7 @@ mod tests {
 
     #[test]
     fn test_tricky_moves() {
-        //let mut cube = MOVE_R;
-
-        //cube
+        // TODO
     }
 
     #[test]
@@ -135,22 +129,4 @@ mod tests {
         let final_cube = face_cube.to_cubie_cube();
         assert_eq!(cube, final_cube);
     }
-
-    #[test]
-    fn test_find_solution_phase1() {
-        let bad_eo: [u8; 12] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
-        let c = Cube::new(CP_DEFAULT, CO_DEFAULT, EP_DEFAULT, bad_eo);
-
-        let t = TablePhase1::new(String::from("taable"));
-
-        let mut passed = false;
-
-        match t.find_solution_to_g1(c.get_flip()) {
-            None => passed = false,
-            _ => passed = true,
-        }
-
-        assert_eq!(passed, false);
-    }
-    // TODO: écrire les tests pour ALL_MOVES (pas sur de l'initialisation)
 }

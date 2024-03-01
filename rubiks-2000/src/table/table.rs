@@ -1,10 +1,13 @@
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
 
-use crate::cube::enums::Move;
-use crate::{ALL_MOVES, BASE_MOVES, CO_DEFAULT, CP_DEFAULT, EP_DEFAULT, MAX_DEPTH_PHASE_1};
+//use crate::cube::enums::Move;
+use crate::cube::defs::*;
 
 use crate::cube::cube::Cube;
+
+/// WARNING!: this file is in devlopment, at terme it will be used to create the first table (to go into sub group 1)
+/// and to perform the phase 1 of the algorithme
 
 pub struct TablePhase1 {
     file_path: String,

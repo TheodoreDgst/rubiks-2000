@@ -7,11 +7,12 @@ pub struct FaceCube {
 }
 
 impl FaceCube {
+    
     pub fn new() -> Self {
         let mut facelets = [Color::B; 54];
         // Assign colors to the facelets based on their position in the solve cube
         for up in 0..9 {
-            facelets[Up] = Color::U;
+            facelets[up] = Color::U;
         }
         for right in 9..18 {
             facelets[right] = Color::R;
@@ -27,8 +28,8 @@ impl FaceCube {
         }
         FaceCube { facelets }
     }
+    ///transform a string of the cube into this struct
     pub fn from_string(str_cube: &str) -> Self {
-        //transform a string of the cube into this struct
         if str_cube.len() < 54 {
             panic!("pas le bon nombre de facelets");
         }
@@ -38,7 +39,7 @@ impl FaceCube {
 
         let mut facelets = [Color::B; 54];
         let mut cpt = [0; 6];
-        for (index,color) in str_cube.char_indices() {
+        for (index, color) in str_cube.char_indices() {
             match color {
                 'U' => {
                     facelets[index] = Color::U;
@@ -57,11 +58,11 @@ impl FaceCube {
                     cpt[3] += 1
                 }
                 'L' => {
-                    facelets[i.0] = Color::L;
+                    facelets[index] = Color::L;
                     cpt[4] += 1
                 }
                 'R' => {
-                    facelets[i.0] = Color::R;
+                    facelets[index] = Color::R;
                     cpt[5] += 1
                 }
                 _ => panic!("pas les bonnes lettres"),
@@ -75,8 +76,9 @@ impl FaceCube {
         }
         FaceCube { facelets }
     }
+
+    ///inverse of the previous fonction
     pub fn to_string(self) -> String {
-        //inverse of the previous fonction
         let mut res = String::new();
         for i in 0..54 {
             match self.facelets[i] {
@@ -91,8 +93,8 @@ impl FaceCube {
         res
     }
 
+    ///transform this struct into the cube struct with the rotation of corner and edge and their position
     pub fn to_cubie_cube(self) -> Cube {
-        //transform this struct into the cube struct with the rotation of corner and edge and their position
         let mut cp = [Corner::URF; 8];
         let mut co: [u8; 8] = [1; 8];
         let mut ep = [Edge::UB; 12];
