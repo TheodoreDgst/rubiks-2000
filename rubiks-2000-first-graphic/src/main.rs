@@ -1,3 +1,5 @@
+#![allow(dead_code)] // This macros disable all the "unsed function/variable ..." warning, to simplify clarity during dev
+
 mod cube;
 mod graphic_cube;
 use cube::cube::Cube;
@@ -16,11 +18,11 @@ fn main() {
     let mut gcube = Gcube::new(cube, &mut window);
 
     while window.render() {
-        /*gcube.apply_move(&mut window, H, 0);
+        gcube.apply_move(&mut window, H, 0);
         gcube.apply_move(&mut window, Vp, 1);
         gcube.apply_move(&mut window, L, 2);
         gcube.apply_move(&mut window, Lp, 0);
         gcube.apply_move(&mut window, V, 1);
-        gcube.apply_move(&mut window, Hp, 3);*/
+        gcube.apply_move(&mut window, Hp, 3);
     }
 }
