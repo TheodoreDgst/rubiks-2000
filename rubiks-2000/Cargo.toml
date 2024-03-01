@@ -1,0 +1,8 @@
+[package]
+name = "rubiks-2000-v2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lazy_static = "1.4.0"   # Used to create static value initialized at runtime
+rand = "0.8.4" # Used in our test file
