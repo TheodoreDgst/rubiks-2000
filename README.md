@@ -8,6 +8,13 @@
 - Affichage de la solution en 3D &#x231B;
 - Tout cela dans une UI ergonomique! &#x231B;
 
+## Avancement actuel:
+Le projet n'est pas encore entièrement fonctionnel. Revenez dans 3 mois ;)
+Le solver est en bonne voie!
+La 3D est bien avancée.
+La détéction du cube arrive!!!
+L'UI arrivera plus tard...
+
 ## Utilisation
 
 Pour utiliser **Rubik's 2000** :
