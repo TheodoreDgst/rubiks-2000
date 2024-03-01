@@ -231,10 +231,10 @@ pub const MOVE_L: Cube = Cube::new(CP_L, CO_L, EP_L, EO_L);
 // Back move
 pub const MOVE_B: Cube = Cube::new(CP_B, CO_B, EP_B, EO_B);
 
-/// The six basic moves
+// The six basic moves
 pub const BASE_MOVES: [Cube; 6] = [MOVE_U, MOVE_R, MOVE_F, MOVE_D, MOVE_L, MOVE_B];
 
-/// Initialize the ALL_MOVES static value
+// Initialize the ALL_MOVES static value
 fn initialize_all_moves() -> [Cube; 18] {
     let mut all_move_tab = [Cube::new_default(); 18];
 
@@ -256,7 +256,7 @@ lazy_static! {
     pub static ref ALL_MOVES: [Cube; 18] = initialize_all_moves();
 }
 
-// /////////
+//Map the corner positions to facelet positions.
 pub const CORNER_FACELET : [[Fc;3];8]=
 [
     [Fc::U9, Fc::R1, Fc::F3], [Fc::U7, Fc::F1, Fc::L3],

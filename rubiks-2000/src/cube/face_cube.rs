@@ -1,7 +1,7 @@
 use super::cube::*;
 use super::defs::*;
 use super::enums::*;
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct FaceCube {
     facelets: [Color; 54],
 }
@@ -9,28 +9,77 @@ pub struct FaceCube {
 impl FaceCube {
     pub fn new() -> Self {
         let mut facelets = [Color::B; 54];
-        for i in 0..9 {
-            facelets[i] = Color::U;
+        // Assign colors to the facelets based on their position in the solve cube
+        for up in 0..9 {
+            facelets[Up] = Color::U;
         }
-        for i in 9..18 {
-            facelets[i] = Color::R;
+        for right in 9..18 {
+            facelets[right] = Color::R;
         }
-        for i in 18..27 {
-            facelets[i] = Color::F;
+        for front in 18..27 {
+            facelets[front] = Color::F;
         }
-        for i in 27..36 {
-            facelets[i] = Color::D;
+        for down in 27..36 {
+            facelets[down] = Color::D;
         }
-        for i in 35..45 {
-            facelets[i] = Color::L;
+        for left in 36..45 {
+            facelets[left] = Color::L;
         }
         FaceCube { facelets }
     }
-    
+    pub fn from_string(str_cube: &str) -> Self {
+        //transform a string of the cube into this struct
+        if str_cube.len() < 54 {
+            panic!("pas le bon nombre de facelets");
+        }
+        if str_cube.len() > 54 {
+            panic!("pas le bon nombre de facelets");
+        }
+
+        let mut facelets = [Color::B; 54];
+        let mut cpt = [0; 6];
+        for (index,color) in str_cube.char_indices() {
+            match color {
+                'U' => {
+                    facelets[index] = Color::U;
+                    cpt[0] += 1
+                }
+                'B' => {
+                    facelets[index] = Color::B;
+                    cpt[1] += 1
+                }
+                'F' => {
+                    facelets[index] = Color::F;
+                    cpt[2] += 1
+                }
+                'D' => {
+                    facelets[index] = Color::D;
+                    cpt[3] += 1
+                }
+                'L' => {
+                    facelets[i.0] = Color::L;
+                    cpt[4] += 1
+                }
+                'R' => {
+                    facelets[i.0] = Color::R;
+                    cpt[5] += 1
+                }
+                _ => panic!("pas les bonnes lettres"),
+            }
+        }
+        // verify if the correct number of each color was provide
+        for i in 0..6 {
+            if cpt[i] != 9 {
+                panic!("probleme de couleur");
+            }
+        }
+        FaceCube { facelets }
+    }
     pub fn to_string(self) -> String {
-        let mut res=String::new();
+        //inverse of the previous fonction
+        let mut res = String::new();
         for i in 0..54 {
-            match self.facelets[i]{
+            match self.facelets[i] {
                 Color::B => res.push('B'),
                 Color::R => res.push('R'),
                 Color::U => res.push('U'),
@@ -41,8 +90,9 @@ impl FaceCube {
         }
         res
     }
-    
+
     pub fn to_cubie_cube(self) -> Cube {
+        //transform this struct into the cube struct with the rotation of corner and edge and their position
         let mut cp = [Corner::URF; 8];
         let mut co: [u8; 8] = [1; 8];
         let mut ep = [Edge::UB; 12];
@@ -50,11 +100,11 @@ impl FaceCube {
         for i in 0..N_CORNERS {
             let fac = CORNER_FACELET[i as usize];
             let mut ori = 0;
-            for or in 0..3 {
-                if self.facelets[fac[ori] as usize] == Color::U
-                    || self.facelets[fac[ori] as usize] == Color::D
+            for diff_ori in 0..3 {
+                if self.facelets[fac[diff_ori] as usize] == Color::U
+                    || self.facelets[fac[diff_ori] as usize] == Color::D
                 {
-                    ori = or;
+                    ori = diff_ori;
                     break;
                 }
             }

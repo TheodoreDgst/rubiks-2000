@@ -52,8 +52,8 @@ impl Cube {
         self.eo
     }
 
-    pub fn corner_multiply(&mut self, b: Cube) {
-        // Multiply this cubie cube with another cubie cube b, restricted to the corners. Does not change b.
+    pub fn corner_multiply(&mut self, other: Cube) {
+        // Multiply this cubie cube with another cubie cube "other", restricted to the corners. Does not change other.
         let mut new_corner_perm = [0; 8];
         let mut new_corner_ori = [0; 8];
         let mut current_ori = 0;
@@ -97,12 +97,15 @@ impl Cube {
     }
 
     pub fn edge_multiply(&mut self, other: Cube) {
+        // Multiply this Cubie Cube with another Cubie Cube 'other', restricted to the edges. Does not change 'other'.
         let mut new_edge_permutation: Vec<u8> = vec![0; 12];
         let mut new_edge_orientation: Vec<u8> = vec![0; 12];
         for edge in 0..12 {
             new_edge_permutation[edge] = self.ep[other.ep[edge] as usize] as u8;
+            // Calculate the new edge orientation based on the orientations of 'other' and the current cube
             new_edge_orientation[edge] = (other.eo[edge] + self.eo[other.eo[edge] as usize]) % 2;
         }
+        // Update the edge permutation and orientation of the current cube
         for edge in 0..12 {
             self.ep[edge] = new_edge_permutation[edge].into();
             self.eo[edge] = new_edge_orientation[edge];
@@ -110,6 +113,7 @@ impl Cube {
     }
 
     pub fn multiply(&mut self, other: Cube) {
+        //apply the differente move of the cube other to current cube
         self.corner_multiply(other);
         self.edge_multiply(other);
     }
@@ -226,32 +230,32 @@ impl Cube {
             }
         }
 
-        let mut s = 0;
+        let mut verify_edge = 0;
         for edge in 0..N_EDGES {
-            s += self.eo[edge as usize];
+            verify_edge += self.eo[edge as usize];
         }
-        if s % 2 != 0 {
+        if verify_edge % 2 != 0 {
             println!("Total edge flip is wrong ...");
             return false;
         }
 
         let mut corner_count = [0; 8];
-        for i in 0..N_COLORS {
-            corner_count[self.cp[i as usize] as usize] += 1;
+        for corner in 0..N_CORNERS {
+            corner_count[self.cp[corner as usize] as usize] += 1;
         }
-        for i in 0..N_COLORS {
-            if corner_count[i as usize] != 1 {
+        for corner in 0..N_CORNERS {
+            if corner_count[corner as usize] != 1 {
                 println!("Some corners are invalid ...");
                 return false;
             }
         }
 
-        let mut s = 0;
-        for i in 0..N_COLORS {
-            s += self.co[i as usize];
+        let mut verify_corner = 0;
+        for corner in 0..N_COLORS {
+            verify_corner += self.co[corner as usize];
         }
 
-        if s % 3 != 0 {
+        if verify_corner % 3 != 0 {
             println!("Total corner flip is wrong...");
             return false;
         }
@@ -271,15 +275,15 @@ impl Cube {
 impl fmt::Display for Cube {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut string = String::new();
-        for i in 0..8 {
+        for corner in 0..8 {
             // NOTE: how to use the enum here rather than 0..8 ??
             // The 8 corners
-            string += format!("({},{})", self.cp[i], self.co[i]).as_str();
+            string += format!("({},{})", self.cp[corner], self.co[corner]).as_str();
         }
         string += "|";
-        for i in 0..12 {
+        for edge in 0..12 {
             // The 12 edges
-            string += format!("({},{})", self.ep[i], self.eo[i]).as_str();
+            string += format!("({},{})", self.ep[edge], self.eo[edge]).as_str();
         }
         write!(f, "{}", string)
     }

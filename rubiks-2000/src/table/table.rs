@@ -55,14 +55,14 @@ impl TablePhase1 {
 
         solution
     }
-
+    // Private method for depth-first search to find a solution to G1.
     fn __dfs(&self, mut cube: Cube, depth: u8, moves_done: &mut Vec<Cube>) -> Option<Vec<Cube>> {
         if cube.is_solved_phase_1() {
             return Some(moves_done.to_vec());
         } else if depth > MAX_DEPTH_PHASE_1 {
             return None;
         }
-
+        // Iterate over base moves and perform depth-first search
         for mov in BASE_MOVES.iter() {
             cube.multiply(*mov);
             moves_done.push(*mov); //PB mdr
