@@ -11,7 +11,7 @@ use kiss3d::{ light::Light, window::Window};
 fn main() {
     let mut window = Window::new("Rubik's 2000");
     window.set_light(Light::StickToCamera);
-    let cube = Cube::new_filled(3);
+    let cube = Cube::new_filled(7);
 
     let mut gcube = Gcube::new(cube, &mut window);
 

@@ -16,7 +16,7 @@ use rand::Rng;
 
 const SIZE: f32 = 1.0;
 const OFFSET: f32 = 0.2;
-const ANIMATION_TIME: f32 = 1.5;
+const ANIMATION_TIME: f32 = 2.0;
 
 #[derive(PartialEq)]
 pub enum Move {
