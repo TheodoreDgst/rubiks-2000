@@ -48,7 +48,7 @@ $ cd rubiks-2000-v2
 * Le [papier original](https://www.jaapsch.net/puzzles/thistle.htm) de Thistlewaite ( utile pour les exemples de tables et l'explication des groupes)
 * Des notions utiles sur la  [théorie des groupes](http://trucsmaths.free.fr/rubik_groupe.htm) avec le Rubik's Cube
 * Le site [Jaap'z](https://www.jaapsch.net/puzzles/theory.htm#group) qui référence pas mal de liens utilies en lien avec le Rubik's Cube
-* Une implémentations expliquée de Thistlewaite en [SDL](https://explainextended.com/2022/12/31/happy-new-year-14/#more-6978) qui nous a permis de mieux apréhender les algorithmes de réduction de groupe grâce aux schémas.
+* Une implémentations expliquée de Thistlewaite en [SQL](https://explainextended.com/2022/12/31/happy-new-year-14/#more-6978) qui nous a permis de mieux apréhender les algorithmes de réduction de groupe grâce aux schémas.
 * Une implémentation en [rust](https://github.com/V-Wong/CubeSimRS) de cet algorithme
 
 ### UI :
