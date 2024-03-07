@@ -1,5 +1,7 @@
 use std::fmt;
 
+use super::{ cube::Cube, defs::ALL_MOVES };
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum Facelet {
     //The names of the facelet positions of the cube
@@ -111,19 +113,30 @@ pub enum Corner {
 
 impl From<u8> for Corner {
     // Implementation of the `From<u8>` trait for the `Corner` enum.
-    fn from(n: u8) -> Self {
-        // Converts an unsigned 8-bit integer into a `Corner` enum variant.
-        match n {
-            0 => Corner::URF,
-            1 => Corner::UFL,
-            2 => Corner::ULB,
-            3 => Corner::UBR,
-            4 => Corner::DFR,
-            5 => Corner::DLF,
-            6 => Corner::DBL,
-            7 => Corner::DRB,
-            _ => panic!("Not handled value to convert into Corner"),
-        }
+    fn from(value: u8) -> Corner {
+        u8_to_corner(value)
+    }
+}
+
+impl From<usize> for Corner {
+    // Implementation of the `From<u8>` trait for the `Corner` enum.
+    fn from(value: usize) -> Corner {
+        u8_to_corner(value as u8)
+    }
+}
+
+/// Converts an unsigned 8-bit integer into a `Corner` enum variant.
+fn u8_to_corner(value: u8) -> Corner {
+    match value {
+        0 => Corner::URF,
+        1 => Corner::UFL,
+        2 => Corner::ULB,
+        3 => Corner::UBR,
+        4 => Corner::DFR,
+        5 => Corner::DLF,
+        6 => Corner::DBL,
+        7 => Corner::DRB,
+        _ => panic!("Not handled value to convert into Corner"),
     }
 }
 
@@ -146,8 +159,8 @@ impl fmt::Display for Corner {
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]
+//The names of the edge positions of the cube. Edge UR e.g. has an U(p) and R(ight) facelet.
 pub enum Edge {
-    //The names of the edge positions of the cube. Edge UR e.g. has an U(p) and R(ight) facelet.
     UR = 0,
     UF = 1,
     UL = 2,
@@ -162,25 +175,36 @@ pub enum Edge {
     BR = 11,
 }
 
+// Implementation of the `From<u8>` trait for the `Edge` enum.
 impl From<u8> for Edge {
-    // Implementation of the `From<u8>` trait for the `Edge` enum.
-    fn from(n: u8) -> Self {
-        // Converts an unsigned 8-bit integer into a `Edge` enum variant.
-        match n {
-            0 => Edge::UR,
-            1 => Edge::UF,
-            2 => Edge::UL,
-            3 => Edge::UB,
-            4 => Edge::DR,
-            5 => Edge::DF,
-            6 => Edge::DL,
-            7 => Edge::DB,
-            8 => Edge::FR,
-            9 => Edge::FL,
-            10 => Edge::BL,
-            11 => Edge::BR,
-            _ => panic!("Invalid edge index"),
-        }
+    fn from(value: u8) -> Self {
+        u8_to_edge(value)
+    }
+}
+
+// Implementation of the `From<usize>` trait for the `Edge` enum.
+impl From<usize> for Edge {
+    fn from(value: usize) -> Self {
+        u8_to_edge(value as u8)
+    }
+}
+
+// Converts an unsigned 8-bit integer into a `Edge` enum variant.
+fn u8_to_edge(value: u8) -> Edge {
+    match value {
+        0 => Edge::UR,
+        1 => Edge::UF,
+        2 => Edge::UL,
+        3 => Edge::UB,
+        4 => Edge::DR,
+        5 => Edge::DF,
+        6 => Edge::DL,
+        7 => Edge::DB,
+        8 => Edge::FR,
+        9 => Edge::FL,
+        10 => Edge::BL,
+        11 => Edge::BR,
+        _ => panic!("Invalid edge index"),
     }
 }
 
@@ -227,6 +251,78 @@ pub enum Move {
     B1 = 15,
     B2 = 16,
     B3 = 17,
+}
+
+impl Move {
+    pub fn get_cube(self) -> Cube {
+        let n = self as usize;
+        ALL_MOVES[n]
+    }
+}
+
+// Implementation of the `From<usize>` trait for the `Edge` enum.
+impl From<usize> for Move {
+    fn from(value: usize) -> Self {
+        match value {
+            0 => Move::U1,
+            1 => Move::U2,
+            2 => Move::U3,
+            3 => Move::R1,
+            4 => Move::R2,
+            5 => Move::R3,
+            6 => Move::F1,
+            7 => Move::F2,
+            8 => Move::F3,
+            9 => Move::D1,
+            10 => Move::D2,
+            11 => Move::D3,
+            12 => Move::L1,
+            13 => Move::L2,
+            14 => Move::L3,
+            15 => Move::B1,
+            16 => Move::B2,
+            17 => Move::B3,
+            _ => panic!("Invalid move index"),
+        }
+    }
+}
+
+impl fmt::Display for Move {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let name = match self {
+            Move::U1 => "U1",
+            Move::U2 => "U2",
+            Move::U3 => "U3",
+            Move::R1 => "R1",
+            Move::R2 => "R2",
+            Move::R3 => "R3",
+            Move::F1 => "F1",
+            Move::F2 => "F2",
+            Move::F3 => "F3",
+            Move::D1 => "D1",
+            Move::D2 => "D2",
+            Move::D3 => "D3",
+            Move::L1 => "L1",
+            Move::L2 => "L2",
+            Move::L3 => "L3",
+            Move::B1 => "B1",
+            Move::B2 => "B2",
+            Move::B3 => "B3",
+        };
+        write!(f, "{}", name)
+    }
+}
+impl Move {
+    pub fn move_inv(self) -> Move{
+        let mut res=self as usize;
+        let temp=res%3;
+        match temp{
+            0 => res+=2,
+            2 => res-=2,
+            _ => ()
+        }
+        Move::from(res)
+    }
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]

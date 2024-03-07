@@ -1,10 +1,11 @@
-use std::fs::{self, File};
-use std::io::{self, Read, Write};
+use std::fs::{ self, File };
+use std::io::{ self, Read, Write };
 
 //use crate::cube::enums::Move;
 use crate::cube::defs::*;
 
-use crate::cube::cube::Cube;
+use crate::cube::cube::*;
+use crate::cube::enums::Move;
 
 /// WARNING!: this file is in devlopment, at terme it will be used to create the first table (to go into sub group 1)
 /// and to perform the phase 1 of the algorithme
@@ -37,47 +38,49 @@ impl TablePhase1 {
         }
     }
 
-    pub fn find_solution_to_g1(&self, _edges_orientations: u16) -> Option<Vec<Cube>> {
-        let cube = Cube::new(
-            CP_DEFAULT,
-            CO_DEFAULT,
-            EP_DEFAULT,
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        );
+    pub fn find_solution_to_g1(&self, cube: Cube) -> Queue<Move> {
+        let mut solution = Queue::new();
+        let found = self.__dfs(cube, 0, &mut solution, &mut (MAX_DEPTH_PHASE_1 + 1));
 
-        let solution = self.__dfs(cube, 0, &mut Vec::new());
-
-        match solution {
-            Some(_) => {
-                println!("solution teouvée!!!!");
-            }
-            None => {
-                println!("solution non trouvée!!!!");
-            }
+        if found {
+            println!("Solution trouvée");
+        } else {
+            println!("Solution non trouvée");
         }
 
         solution
     }
+
     // Private method for depth-first search to find a solution to G1.
-    fn __dfs(&self, mut cube: Cube, depth: u8, moves_done: &mut Vec<Cube>) -> Option<Vec<Cube>> {
-        if cube.is_solved_phase_1() {
-            return Some(moves_done.to_vec());
-        } else if depth > MAX_DEPTH_PHASE_1 {
-            return None;
+    fn __dfs(
+        &self,
+        mut cube: Cube,
+        depth: u8,
+        moves_done: &mut Queue<Move>,
+        min_depth: &mut u8
+    ) -> bool {
+        if depth > *min_depth {
+            return false;
         }
-        // Iterate over base moves and perform depth-first search
-        for mov in BASE_MOVES.iter() {
-            cube.multiply(*mov);
-            moves_done.push(*mov); //PB mdr
-            match self.__dfs(cube, depth + 1, moves_done) {
-                Some(solution_vec) => return Some(solution_vec),
-                None => {
-                    moves_done.pop();
-                }
-            }
+        if cube == DEFAULT {
+            *min_depth = depth;
+            println!("new min depth = {}", *min_depth);
+            return true;
         }
 
-        None
+        let copy = cube;
+
+        // Iterate over base moves and perform depth-first search
+        for (i_mov, mov) in ALL_MOVES.iter().enumerate() {
+            cube.multiply(*mov);
+            // println!("rec - {}", Move::from(i_mov).to_string());
+            if self.__dfs(cube, depth + 1, moves_done, min_depth) {
+                moves_done.enqueue(i_mov.into());
+            }
+            cube = copy;
+        }
+
+        false
     }
 
     pub fn read(self) -> io::Result<()> {
@@ -102,4 +105,31 @@ pub fn u16_to_binary_array(n: u16) -> [u8; 11] {
     }
 
     result
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Queue<T> {
+    pub items: Vec<T>,
+}
+
+impl<T> Queue<T> {
+    fn new() -> Self {
+        Queue { items: Vec::new() }
+    }
+
+    pub fn enqueue(&mut self, item: T) {
+        self.items.push(item);
+    }
+
+    pub fn dequeue(&mut self) -> Option<T> {
+        if self.is_empty() { None } else { Some(self.items.remove(0)) }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.items.is_empty()
+    }
+
+    pub fn len(&self) -> usize {
+        self.items.len()
+    }
 }

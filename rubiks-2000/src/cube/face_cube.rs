@@ -7,7 +7,6 @@ pub struct FaceCube {
 }
 
 impl FaceCube {
-    
     pub fn new() -> Self {
         let mut facelets = [Color::B; 54];
         // Assign colors to the facelets based on their position in the solve cube
