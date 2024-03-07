@@ -38,17 +38,15 @@ impl TablePhase1 {
         }
     }
 
-    pub fn find_solution_to_g1(&self, cube: Cube) -> Queue<Move> {
+    pub fn find_solution_to_g1(&self, cube: Cube) -> Option<Queue<Move>> {
         let mut solution = Queue::new();
         let found = self.__dfs(cube, 0, &mut solution, &mut (MAX_DEPTH_PHASE_1 + 1));
 
         if found {
-            println!("Solution trouvée");
+            Some(solution)
         } else {
-            println!("Solution non trouvée");
+            None
         }
-
-        solution
     }
 
     // Private method for depth-first search to find a solution to G1.
@@ -59,28 +57,33 @@ impl TablePhase1 {
         moves_done: &mut Queue<Move>,
         min_depth: &mut u8
     ) -> bool {
-        if depth > *min_depth {
+        if depth >= *min_depth {
             return false;
         }
         if cube == DEFAULT {
             *min_depth = depth;
+            // Clean the queue
+            moves_done.clear();
             println!("new min depth = {}", *min_depth);
             return true;
         }
 
-        let copy = cube;
+        let mut found_solution = false;
 
         // Iterate over base moves and perform depth-first search
         for (i_mov, mov) in ALL_MOVES.iter().enumerate() {
             cube.multiply(*mov);
             // println!("rec - {}", Move::from(i_mov).to_string());
-            if self.__dfs(cube, depth + 1, moves_done, min_depth) {
+            if self.__dfs(cube, depth + 1, moves_done, min_depth){
+                found_solution = true;
                 moves_done.enqueue(i_mov.into());
             }
-            cube = copy;
-        }
 
-        false
+            // Take the inverse move
+            let inv_mov = ALL_MOVES[Move::from(i_mov).move_inv() as usize];
+            cube.multiply(inv_mov);
+        }
+        found_solution
     }
 
     pub fn read(self) -> io::Result<()> {
@@ -96,6 +99,15 @@ impl TablePhase1 {
     }
 }
 
+pub fn encode_solution(solution: Queue<Move>) -> u32{
+    let mut res = 0;
+    for mv in solution.items.iter() {
+        res += *mv as u32;
+        res *= 18;
+    }
+    res
+}
+
 pub fn u16_to_binary_array(n: u16) -> [u8; 11] {
     let mut result = [0; 11];
 
@@ -109,7 +121,7 @@ pub fn u16_to_binary_array(n: u16) -> [u8; 11] {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Queue<T> {
-    pub items: Vec<T>,
+    items: Vec<T>,
 }
 
 impl<T> Queue<T> {
@@ -131,5 +143,9 @@ impl<T> Queue<T> {
 
     pub fn len(&self) -> usize {
         self.items.len()
+    }
+
+    pub fn clear(&mut self) {
+        self.items = Vec::new();
     }
 }

@@ -260,7 +260,7 @@ impl Move {
     }
 }
 
-// Implementation of the `From<usize>` trait for the `Edge` enum.
+// Implementation of the `From<usize>` trait for the `Move` enum.
 impl From<usize> for Move {
     fn from(value: usize) -> Self {
         match value {
@@ -312,6 +312,7 @@ impl fmt::Display for Move {
         write!(f, "{}", name)
     }
 }
+
 impl Move {
     pub fn move_inv(self) -> Move{
         let mut res=self as usize;
