@@ -2,6 +2,7 @@ use super::defs::*;
 use super::enums::{ Corner, Edge };
 use super::face_cube::*;
 use std::fmt; // Usef for impl display
+use rand::Rng;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Cube {
@@ -55,7 +56,7 @@ impl Cube {
             let ori_other = other.co[c] as i8;
             if ori_self < 3 && ori_other < 3 {
                 // two regular cubes
-              
+
                 current_ori = ori_self + ori_other;
                 if current_ori >= 3 {
                     current_ori -= 3;
@@ -119,16 +120,16 @@ impl Cube {
     /// => 3^7 = 2187 possibilities
     /// Do not confuse with 'flip'
     /// We ignore the last one (7th index)
-    pub fn get_twist(self) -> u16 {
+    pub fn get_twist(self) -> usize {
         let mut ret = 0;
         // from 0 to 7 because of the rubik's cube law (it's not possible that only one corner is twisted)
         for i in 0..7 {
-            ret = 3 * ret + (self.co[i] as u16);
+            ret = 3 * ret + (self.co[i] as usize);
         }
-        return ret;
+        ret
     }
 
-    pub fn set_twist(&mut self, mut twist: u16) {
+    pub fn set_twist(&mut self, mut twist: usize) {
         let mut twist_parity = 0;
         for i in (0..7).rev() {
             self.co[i] = (twist % 3) as u8;
@@ -138,7 +139,7 @@ impl Cube {
         self.co[7] = (3 - (twist_parity % 3)) % 3;
     }
 
-    pub fn set_flip(&mut self, mut flip: u16) {
+    pub fn set_flip(&mut self, mut flip: usize) {
         let mut flip_parity = 0;
         for i in (0..11).rev() {
             self.eo[i] = (flip % 2) as u8;
@@ -153,12 +154,12 @@ impl Cube {
     /// => 2^11 = 2048 possibilities
     /// Do not confuse with 'twist'
     /// We ignore the last one (11th index )
-    pub fn get_flip(self) -> u16 {
+    pub fn get_flip(self) -> usize {
         let mut ret = 0;
         for i in 0..11 {
-            ret = 2 * ret + (self.eo[i] as u16);
+            ret = 2 * ret + (self.eo[i] as usize);
         }
-        return ret;
+        ret
     }
 
     ///Return a facelet representation of the cube.
@@ -263,6 +264,15 @@ impl Cube {
 
         return true;
     }
+
+    pub fn randomize(&mut self) {
+        let mut rng = rand::thread_rng();
+        for _ in 0..100 {
+            let n = rng.gen_range(0..N_MOVES);
+
+            self.multiply(ALL_MOVES[n]);
+        }
+    }
 }
 
 /// Display implementation for CubieCube (to_string() method)
@@ -290,9 +300,6 @@ impl fmt::Display for Cube {
 /// if cube_a == cube_b {...}
 impl PartialEq for Cube {
     fn eq(&self, other: &Self) -> bool {
-        self.cp == other.cp &&
-        self.co == other.co &&
-        self.ep == other.ep &&
-        self.eo == other.eo
+        self.cp == other.cp && self.co == other.co && self.ep == other.ep && self.eo == other.eo
     }
 }

@@ -251,12 +251,28 @@ pub enum Move {
     B1 = 15,
     B2 = 16,
     B3 = 17,
+    Default,
 }
 
 impl Move {
     pub fn get_cube(self) -> Cube {
         let n = self as usize;
         ALL_MOVES[n]
+    }
+
+    pub fn is_same_slice(self, other: Move) -> bool {
+        let s = self as u8;
+        let m = s % 3;
+        let o = other as u8;
+        match m {
+            0 => o >= s && o < s + 3,
+            1 => o >= s - 1 && o <= s +1 ,
+            _ => o >= s - 2 && o <= s
+        }
+    }
+
+    pub fn is_opposed_slice(self, other: Move) -> bool {
+        ((self as u8) % 9) / 3 == ((other as u8) % 9) / 3
     }
 }
 
@@ -308,19 +324,24 @@ impl fmt::Display for Move {
             Move::B1 => "B1",
             Move::B2 => "B2",
             Move::B3 => "B3",
+            Move::Default => "__",
         };
         write!(f, "{}", name)
     }
 }
 
 impl Move {
-    pub fn move_inv(self) -> Move{
-        let mut res=self as usize;
-        let temp=res%3;
-        match temp{
-            0 => res+=2,
-            2 => res-=2,
-            _ => ()
+    pub fn move_inv(self) -> Move {
+        let mut res = self as usize;
+        let temp = res % 3;
+        match temp {
+            0 => {
+                res += 2;
+            }
+            2 => {
+                res -= 2;
+            }
+            _ => (),
         }
         Move::from(res)
     }

@@ -76,7 +76,7 @@ mod tests {
         for _ in 0..10 {
             let twist = rng.gen_range(0..N_CORNER_ORI);
             c.set_twist(twist);
-            assert_eq!(c.get_twist(), twist);
+            assert_eq!(c.get_twist(), twist as usize);
         }
     }
 
@@ -91,9 +91,9 @@ mod tests {
         assert_eq!(c.get_flip(), 1);
 
         for _ in 0..10 {
-            let flip = rng.gen_range(0..N_EDGE_PERM);
+            let flip = rng.gen_range(0..N_EDGE_ORI);
             c.set_flip(flip);
-            assert_eq!(c.get_flip(), flip);
+            assert_eq!(c.get_flip(), flip as usize);
         }
     }
 

@@ -6,3 +6,5 @@ edition = "2021"
 [dependencies]
 lazy_static = "1.4.0"   # Used to create static value initialized at runtime
 rand = "0.8.4" # Used in our test file
+rayon = "1.9.0"
+linya = "0.3.0"

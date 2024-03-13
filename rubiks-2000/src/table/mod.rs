@@ -1,2 +1,2 @@
-pub mod phase1;
-pub mod table;
+pub mod phase_1;
+pub mod phase_2;

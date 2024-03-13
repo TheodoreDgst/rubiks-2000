@@ -3,9 +3,12 @@ use super::enums::{ Color as Cl, Corner as Co, Edge as Ed, Facelet as Fc };
 use lazy_static::lazy_static; // Used to create ALL_MOVES (because we cannot initialize with a not const functions a const at runtime)
 
 //////////////////////// Some constants about Rubiks' Cube ////////////////////////////////////////////////////////////////
-pub const N_CORNER_ORI: u16 = 2187;
-pub const N_EDGE_PERM: u16 = 2048;
-pub const MAX_DEPTH_PHASE_1: u8 = 7; // I think it's 7 rather
+pub const N_CORNER_ORI: usize = 2187;
+pub const CARD_G_2: usize = 1_082_656;
+pub const EDGE_PERM_4: usize = 4_804;
+pub const N_EDGE_ORI: usize = 2048;
+pub const MAX_DEPTH_PHASE_1: usize = 8;
+pub const MAX_DEPTH_PHASE_2: usize = 4;
 pub const N_COLORS: usize = 6;
 pub const N_EDGES: usize = 12;
 pub const N_CORNERS: usize = 8;
